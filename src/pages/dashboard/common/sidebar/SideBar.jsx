@@ -7,11 +7,23 @@ import { ModalContext } from "../../../../setup/context/ModalContext";
 import Modal from "../../../../common/Modal";
 import CreateVagaForm from "../forms/CreateVagaForm";
 import { useParams } from "react-router-dom";
+import AuthContext from "../../../../setup/auth/context/AuthContext";
 const SideBar = () => {
+  const { authTokens, headerConfig } = useContext(AuthContext);
+
+  const fetchVagasSideBar = async () => {
+    const res = await Axios.get(
+      "http://localhost:8000/api/dashboard/vaga/list/",
+      {
+        headers: headerConfig,
+      }
+    );
+    console.log(res);
+    return res.data;
+  };
+
   const { data, isLoading } = useQuery(["jobsSideBar"], () =>
-    Axios.get("http://localhost:8000/api/dashboard/vaga/list/").then(
-      (res) => res.data
-    )
+    fetchVagasSideBar()
   );
 
   const { showModal, setShowModal, setModalContent, modalContent } =

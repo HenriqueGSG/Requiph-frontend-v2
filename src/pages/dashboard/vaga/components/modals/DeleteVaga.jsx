@@ -2,20 +2,15 @@ import React, { useContext } from "react";
 import Axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { useDeleteVaga } from "../../hooks/useVagaData";
+import AuthContext from "../../../../../setup/auth/context/AuthContext";
 
 const DeleteVaga = ({ setShowModal, idVaga }) => {
-  const deleteVaga = async () => {
-    const response = await Axios.delete(
-      `http://localhost:8000/api/dashboard/vaga/delete/${idVaga}/`
-    );
-    console.log(idVaga);
-  };
-  console.log(idVaga, "aaa");
-
-  const { mutate } = useDeleteVaga(idVaga);
+  const { headerConfig } = useContext(AuthContext);
+  const { mutate } = useDeleteVaga();
   const navigate = useNavigate();
   const handleDeleteVaga = () => {
-    mutate(idVaga);
+    console.log(headerConfig);
+    mutate({ idVaga: idVaga, header: headerConfig });
     setShowModal(false);
     navigate("/dashboard");
   };

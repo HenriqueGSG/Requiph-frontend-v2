@@ -1,8 +1,10 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import Axios from "axios";
-const fetchResumesList = async (id) => {
+const fetchResumesList = async (id, headerConfig) => {
+  console.log(headerConfig);
   const res = await Axios.get(
-    `http://localhost:8000/api/dashboard/vaga/resumes/${id}/`
+    `http://localhost:8000/api/dashboard/vaga/resumes/${id}/`,
+    { headers: headerConfig }
   );
   return res.data;
 };
@@ -19,11 +21,10 @@ const likeResume = async (resumeId) => {
     `http://localhost:8000/api/dashboard/resume/update/${resumeId}/`,
     { selected: true }
   );
-  console.log(response);
 };
 
-export const useResumeFecth = (id) => {
-  return useQuery([`resumesJob`, id], () => fetchResumesList(id));
+export const useResumeFecth = (id, headerConfig) => {
+  return useQuery([`resumesJob`, id], () => fetchResumesList(id, headerConfig));
 };
 
 export const useDeleteResume = (resumeId, idJob) => {

@@ -1,7 +1,5 @@
 import { useContext } from "react";
-import { useQuery } from "@tanstack/react-query";
 import { useParams } from "react-router-dom";
-import Axios from "axios";
 import { MdEditNote, MdOutlineDeleteSweep, MdRefresh } from "react-icons/md";
 import TableTest from "./components/TableTest";
 import { ModalContext } from "../../../setup/context/ModalContext";
@@ -9,22 +7,23 @@ import DeleteVaga from "./components/modals/DeleteVaga";
 import EditVaga from "./components/modals/EditVaga";
 import { useResumeFecth } from "./hooks/useResumes";
 import { useVagaData } from "./hooks/useVagaData";
+import AuthContext from "../../../setup/auth/context/AuthContext";
 const VagaPage = () => {
   const { id } = useParams();
 
-  const { data, isLoading } = useVagaData(id);
+  const { headerConfig } = useContext(AuthContext);
   const { setShowModal, setModalContent } = useContext(ModalContext);
+  const { data, isLoading } = useVagaData(id, headerConfig);
   const {
     data: resumesData,
     isLoading: isLoadingResume,
     refetch: refetchResumes,
-  } = useResumeFecth(id);
+  } = useResumeFecth(id, headerConfig);
 
   if (isLoading | isLoadingResume) {
     return <h1>Loading</h1>;
   }
 
-  console.log(data);
   return (
     <>
       <div className="flex w-full flex-col  p-4 lg:p-10  bg-gray-100 overflow-auto">
